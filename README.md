@@ -1,2 +1,4 @@
 # CSC2042
-.SQL files for assignment 
+.SQL script files for assignment
+
+~Daniel Craig
