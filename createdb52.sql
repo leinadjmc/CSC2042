@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `Emergency_Contact` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAUT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8;
 
 -- ---------------------------------------------
 -- Table `Employee`
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `Employee` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAUT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8;
 
 -- ---------------------------------------------
 -- Table `Tenant`
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `Tenant` (
   ON DELETE NO ACTION
   ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAUT CHARACTER SET = utf8;
+DEFAULT CHARACTER SET = utf8;
 
 -- ---------------------------------------------
 -- Table `Skills`
@@ -70,7 +70,7 @@ DEFAUT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `Skills` ;
 CREATE TABLE IF NOT EXISTS `Skills` (
   `skill_id` INT NOT NULL,
-  `skill` VARCHAR(255) NOT NULL DEFAULT NULL,
+  `skill` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`skill_id`),
   INDEX `skill` (`skill` ASC))
 ENGINE = InnoDB
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `TechnicianSkills`(
   FOREIGN KEY (`employee_id`)
   REFERENCES Employee(`employee_id`)
   ON DELETE NO ACTION
-  ON UPDATE NO ACTION
+  ON UPDATE NO ACTION,
   CONSTRAINT `fk_TechnicianSkills_skill_id`
   FOREIGN KEY (`skill_id`)
   REFERENCES Skills(`skill_id`)
@@ -117,7 +117,7 @@ DEFAULT CHARACTER SET = utf8;
 -- ---------------------------------------------
 DROP TABLE IF EXISTS `Building` ;
 CREATE TABLE IF NOT EXISTS `Building`(
-  `building_id` INT NOT NULL DEFAULT NULL,
+  `building_id` INT NOT NULL AUTO_INCREMENT,
   `building_number` INT,
   `street` VARCHAR(255) NOT NULL,
   `city` VARCHAR(255) NOT NULL,
@@ -129,5 +129,81 @@ CREATE TABLE IF NOT EXISTS `Building`(
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+-- ---------------------------------------------
+-- Table `Apartment`
+-- ---------------------------------------------
+DROP TABLE IF EXISTS `Apartment` ;
+CREATE TABLE IF NOT EXISTS `Apartment` (
+  `apartment_id` INT NOT NULL AUTO_INCREMENT,
+  `building_id` INT NOT NULL,
+  `manager_id` INT NOT NULL,
+  `apartment_number` INT NOT NULL,
+  `number_bedrooms` INT NOT NULL,
+  `total_bathrooms` INT NOT NULL,
+  `total_area` BIGINT NOT NULL,
+  PRIMARY KEY (`apartment_id`),
+  CONSTRAINT `fk_Apartment_building_id`
+  FOREIGN KEY (`building_id`)
+  REFERENCES Building(`building_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Apartment_manager_id`
+  FOREIGN KEY (`manager_id`)
+  REFERENCES Manager(`manager_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
-)
+-- ---------------------------------------------
+-- Table `Office`
+-- ---------------------------------------------
+DROP TABLE IF EXISTS `Office` ;
+CREATE TABLE IF NOT EXISTS `Office` (
+  `apartment_id` INT NOT NULL,
+  `manager_id` INT NOT NULL,
+ CONSTRAINT `fk_Office_apartment_id`
+ FOREIGN KEY (`apartment_id`)
+ REFERENCES Apartment(`apartment_id`)
+ ON UPDATE NO ACTION
+ ON DELETE NO ACTION,
+ CONSTRAINT `fk_Office_manager_id`
+ FOREIGN KEY (`manager_id`)
+ REFERENCES Manager(`manager_id`)
+ ON DELETE NO ACTION
+ ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+-- ---------------------------------------------
+-- Table `LeaseAgreement`
+-- ---------------------------------------------
+DROP TABLE IF EXISTS `LeaseAgreement`;
+CREATE TABLE IF NOT EXISTS `LeaseAgreement` (
+  `lease_id` INT NOT NULL AUTO_INCREMENT,
+  `person_id` INT NOT NULL,
+  `apartment_id` INT NOT NULL,
+  `start_date` DATE NOT NULL,
+  `end_date` DATE NOT NULL,
+  `monthly_rent` BIGINT NOT NULL,
+  `expired` BOOLEAN NOT NULL,
+  `manager_id` INT NOT NULL,
+  PRIMARY KEY (`lease_id`),
+  CONSTRAINT `fk_LeaseAgreement_person_id`
+  FOREIGN KEY (`person_id`)
+  REFERENCES Person(`person_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+  CONSTRAINT `fk_LeaseAgreement_apartment_id`
+  FOREIGN KEY (`apartment_id`)
+  REFERENCES Apartment(`apartment_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+  CONSTRAINT `fk_LeaseAgreement_manager_id`
+  FOREIGN KEY (`manager_id`)
+  REFERENCES Manager(`manager_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+  INDEX `start_date` (`start_date` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
