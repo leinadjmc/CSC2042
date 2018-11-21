@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `Employee` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
+AUTO_INCREMENT=40216270
 DEFAULT CHARACTER SET = utf8;
 
 -- ---------------------------------------------
