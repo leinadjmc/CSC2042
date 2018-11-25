@@ -1,1 +1,11 @@
-
+DROP TABLE tenant;
+DROP TABLE leaseagreement;
+DROP TABLE manageroffice;
+DROP TABLE apartment;
+DROP TABLE building;
+DROP TABLE manager;
+DROP TABLE technicianskills;
+DROP TABLE technician;
+DROP TABLE employee;
+DROP TABLE emergency_contact;
+DROP TABLE person;
