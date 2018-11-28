@@ -33,3 +33,8 @@ WHERE leaseagreement.expired = '0' AND leaseagreement.monthly_rent NOT IN (
   SELECT B.monthly_rent
   FROM leaseagreement A, leaseagreement B
   WHERE A.monthly_rent < B.monthly_rent));
+
+SELECT building.building_number, concat(building.street, char(13), building.city, char(13), building.county, char(13),
+building.postcode)AS "Address", AVG(apartment.number_bedrooms) AS "Average number of bedrooms", AVG(apartment.total_bathrooms) 
+AS "Average number of bathrooms", SUM(apartment.total_area) AS "Total Area per building"FROM apartment RIGHT JOIN building 
+ON apartment.building_number = building.building_number GROUP BY building_number
